@@ -5,6 +5,7 @@ import ch.njol.skript.classes.Changer;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
+import ch.njol.skript.lang.util.ConvertedExpression;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.btk5h.skriptmirror.WrappedEvent;
@@ -55,6 +56,11 @@ public class ExprRawExpression extends SimpleExpression<Expression> {
     if (expr == null)
       return;
     Expression<?> source = expr.getSource();
+
+    // !!! CAUTION: This is only a temporary fix and might cause other problems.
+    if (source instanceof ConvertedExpression) {
+      source.acceptChange(changeMode);
+    }
 
     event = ((WrappedEvent) event).getDirectEvent();
     source.change(event, delta, changeMode);
